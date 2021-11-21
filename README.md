@@ -1,2 +1,24 @@
 # GS2UNITY
  Easiest way to import data from Google Sheets to Unity
+
+- Compatible with Google API v4
+- Able to download to any devices running Unity
+- Able to setup within 10 minutes
+- Doesn't require any credentials or go to Google Cloud settings
+- Doesn't need to download Google SDK or any DLL files
+- Doesn't need to specify data types before importing
+- Fast
+- Source code available with a demo example
+
+
+# Steps to Setup
+1. Create a Google Sheet
+2. Copy & Paste Apps Script (https://gist.github.com/zenith4eva/5204d88714a73dbf74e4ad9bff061fe4)
+3. Deploy as Web App (Set "Who has Access: Anyone")
+4. Copy Deployment ID
+5. Paste Deployment ID to Google Sheets DB Script
+6. Enter the name of the Tabs that you wish to import in Google Sheets DB Script's Sheet Tab Names List
+
+![13](https://user-images.githubusercontent.com/2201032/142775735-705f7f31-015c-4781-839f-baace136c255.JPG)
+
+Unity Package available (https://github.com/zenith4eva/GS2UNITY/raw/main/GS2Unity.unitypackage)
