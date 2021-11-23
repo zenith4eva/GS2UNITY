@@ -15,12 +15,12 @@ public class GS2UnityDemoScript : MonoBehaviour
     private void OnEnable()
     {
         googleSheetsDB = gameObject.GetComponent<GoogleSheetsDB>();
-        GoogleSheetsDB.OnDownloadComplete += UpdateText;
+        googleSheetsDB.OnDownloadComplete += UpdateText;
     }
 
     private void OnDisable()
     {
-        GoogleSheetsDB.OnDownloadComplete -= UpdateText;
+        googleSheetsDB.OnDownloadComplete -= UpdateText;
     }
 
     public void UpdateText()
