@@ -1,5 +1,7 @@
 # GS2UNITY
- Easiest way to import data from Google Sheets to Unity
+![GS2Unity](https://user-images.githubusercontent.com/2201032/144155591-d8fb6d8b-6f0f-4a5f-b304-99c54da4f259.png)
+Easiest way to import data from Google Sheets to Unity
+
 
 - Compatible with Google API v4
 - Able to download to any devices running Unity
