@@ -15,11 +15,12 @@ Easiest way to import data from Google Sheets to Unity
 
 # Steps to Setup
 1. Create a Google Sheet
-2. Copy & Paste Apps Script (https://gist.github.com/zenith4eva/5204d88714a73dbf74e4ad9bff061fe4)
-3. Deploy as Web App (Set "Who has Access: Anyone")
-4. Copy Deployment ID
-5. Paste Deployment ID to Google Sheets DB Script
-6. Enter the name of the Tabs that you wish to import in Google Sheets DB Script's Sheet Tab Names List
+2. Create a new App Script (Extensions --> App Script)
+3. Copy & Paste Apps Script code and save (https://gist.github.com/zenith4eva/5204d88714a73dbf74e4ad9bff061fe4)
+4. Deploy as Web App (Set "Who has Access: Anyone")
+5. Copy Deployment ID
+6. Paste Deployment ID to Google Sheets DB Script
+7. Enter the name of the Tabs that you wish to import in Google Sheets DB Script's Sheet Tab Names List
 
 ![13](https://user-images.githubusercontent.com/2201032/142775735-705f7f31-015c-4781-839f-baace136c255.JPG)
 
