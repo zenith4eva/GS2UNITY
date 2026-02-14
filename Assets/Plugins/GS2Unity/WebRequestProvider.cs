@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using UnityEngine.Networking;
@@ -23,19 +23,25 @@ public class UnityWebRequestProvider : WebRequestProvider
 
     IEnumerator PerformRequest(string url, Action<WebRequestProviderResult> callback)
     {
-        UnityWebRequest www = new UnityWebRequest(url);
-        www.downloadHandler = new DownloadHandlerBuffer();
-        yield return www.SendWebRequest();
-
-        var result = new WebRequestProviderResult()
+        using (UnityWebRequest www = UnityWebRequest.Get(url))
         {
-            error = www.error,
-            text = www.downloadHandler.text
-        };
+            yield return www.SendWebRequest();
 
-        if (callback != null)
-        {
-            callback(result);
+            var result = new WebRequestProviderResult();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                result.error = www.error;
+            }
+            else
+            {
+                result.text = www.downloadHandler.text;
+            }
+
+            if (callback != null)
+            {
+                callback(result);
+            }
         }
     }
 }

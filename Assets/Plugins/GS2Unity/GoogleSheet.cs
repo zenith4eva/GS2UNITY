@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using System;
 using System.Linq;
@@ -14,6 +14,7 @@ public class GoogleSheet
     public string sheetAddress = "";
     public string sheetName = "";
     public bool isDataUpdatingFinished = false;
+    public bool isError = false;
     public event Action OnUpdate;
 
     public GoogleSheet(string url, string sAddress, string sName, WebRequestProvider wrp)
@@ -28,19 +29,24 @@ public class GoogleSheet
 	{
 		if (_updateRequestInProgress)
 		{
-			onDone(false);
+			if (onDone != null) onDone(false);
 		}
 		else
 		{
 			_updateRequestInProgress = true;
+            isDataUpdatingFinished = false;
+            isError = false;
 
             var updateURL = string.Format(this._URL, sheetAddress, sheetName);
 
             _webRequestProvider.HTTPGet(updateURL, (wwwResult) =>
 			{
 				bool success = UpdateDataOnSuccess(wwwResult);
-				onDone(success);
-				_updateRequestInProgress = false;
+                isDataUpdatingFinished = true;
+
+                if (onDone != null) onDone(success);
+
+                _updateRequestInProgress = false;
 
 				if (OnUpdate != null && success)
 				{
@@ -164,12 +170,12 @@ public class GoogleSheet
 		if (wpr.error != null)
 		{
 			Debug.LogError("Update Failed... " + wpr.error);
+            isError = true;
 			return false;
 		}
 		else
 		{
-			JSONUpdateSheetData(wpr.text);
-			return true;
+			return JSONUpdateSheetData(wpr.text);
 		}
 	}
 
@@ -178,16 +184,36 @@ public class GoogleSheet
 		return ((char)('A' + column - 1)).ToString() + row.ToString();
 	}
 
+    public bool LoadFromJSON(string jsonData)
+    {
+        return JSONUpdateSheetData(jsonData);
+    }
 
-	void JSONUpdateSheetData(string jsonData)
+	bool JSONUpdateSheetData(string jsonData)
 	{
-        if (jsonData != null)
+        if (string.IsNullOrEmpty(jsonData))
+        {
+            return false;
+        }
+
+        try
         {
             var root = MiniJSON.Json.Deserialize(jsonData) as Dictionary<string, object>;
+
+            if (root == null)
+            {
+                 Debug.LogError("Failed to deserialize JSON data.");
+                 isError = true;
+                 return false;
+            }
+
+            sheetData.Clear();
 
             foreach (var kvp in root)
             {
                 var entryData = kvp.Value as Dictionary<string, object>;
+                if (entryData == null) continue;
+
                 var configVariant = new Dictionary<string, string>();
 
                 foreach (var entryKVP in entryData)
@@ -197,7 +223,15 @@ public class GoogleSheet
 
                 sheetData.Add(kvp.Key, configVariant);
             }    
+
+            isDataUpdatingFinished = true;
+            return true;
         }
-        isDataUpdatingFinished = true;
+        catch (Exception ex)
+        {
+            Debug.LogError("Error parsing JSON: " + ex.Message);
+            isError = true;
+            return false;
+        }
     }
 }
